@@ -111,7 +111,6 @@ typedef void (^GIDAppCheckTokenCompletion)(GACAppCheckToken *,NSError * _Nullabl
     }
 
     [self.appCheck limitedUseTokenWithCompletion:^(GACAppCheckTokenResult * _Nonnull result) {
-      NSError * __block maybeError = result.error;
       @synchronized (self) {
         if (!result.error) {
           [self.userDefaults setBool:YES forKey:kGIDAppCheckPreparedKey];
@@ -124,7 +123,7 @@ typedef void (^GIDAppCheckTokenCompletion)(GACAppCheckToken *,NSError * _Nullabl
 
 
       for (GIDAppCheckPrepareCompletion savedCompletion in callbacks) {
-        savedCompletion(maybeError);
+        savedCompletion(result.error);
       }
     }];
   });
